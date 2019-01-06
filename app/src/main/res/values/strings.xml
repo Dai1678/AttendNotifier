@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">AttendNotifier</string>
+
+    <array name="classwork_number_images">
+        <item>@mipmap/classwork_1_image</item>
+        <item>@mipmap/classwork_2_image</item>
+        <item>@mipmap/classwork_3_image</item>
+        <item>@mipmap/classwork_4_image</item>
+        <item>@mipmap/classwork_5_image</item>
+        <item>@mipmap/classwork_6_image</item>
+    </array>
+
+    <string name="common_not_attend">未受講</string>
+    <string name="common_attended">出席</string>
+    <string name="common_late">遅刻</string>
+    <string name="common_absent">欠席</string>
+    <string name="common_other_status">その他</string>
+
+    <string name="common_monday">月曜日</string>
+    <string name="common_tuesday">火曜日</string>
+    <string name="common_wednesday">水曜日</string>
+    <string name="common_thursday">木曜日</string>
+    <string name="common_friday">金曜日</string>
+    <string name="common_saturday">土曜日</string>
+    <string name="common_sunday">日曜日</string>
+
+    <string-array name="tab_title">
+        <item>@string/common_monday</item>
+        <item>@string/common_tuesday</item>
+        <item>@string/common_wednesday</item>
+        <item>@string/common_thursday</item>
+        <item>@string/common_friday</item>
+        <item>@string/common_saturday</item>
+    </string-array>
+
+    <string-array name="attend_status_spinner_item">
+        <item>@string/common_not_attend</item>
+        <item>@string/common_attended</item>
+        <item>@string/common_late</item>
+        <item>@string/common_absent</item>
+        <item>@string/common_other_status</item>
+    </string-array>
+
+    <string-array name="default_classwork_start_time">
+        <item>9:10</item>
+        <item>11:00</item>
+        <item>13:30</item>
+        <item>15:20</item>
+        <item>17:10</item>
+        <item>19:00</item>
+    </string-array>
+
+    <string-array name="default_classwork_end_time">
+        <item>10:50</item>
+        <item>12:40</item>
+        <item>15:10</item>
+        <item>17:00</item>
+        <item>18:50</item>
+        <item>20:40</item>
+    </string-array>
+
+</resources>
