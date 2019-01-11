@@ -80,7 +80,7 @@ class DailyClassListAdapter(
                 }
 
                 itemView.notify_checkbox.setOnClickListener {
-                    //TODO 授業なしレイアウトとの切り替え
+                    //授業なしレイアウトとの切り替え
                     setLayoutParam(itemView, model.classworkName)
 
                     //TODO 通知on/offの切り替え
