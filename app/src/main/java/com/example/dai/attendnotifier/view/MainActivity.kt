@@ -2,6 +2,8 @@ package com.example.dai.attendnotifier.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import com.example.dai.attendnotifier.R
 import com.example.dai.attendnotifier.adapter.ViewPagerAdapter
 import com.example.dai.attendnotifier.model.ClassworkModel
@@ -17,6 +19,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar!!.apply {
+            elevation = 0F
+            title = "第6セメスター"
+        }
 
         initRealm()
 
@@ -60,5 +67,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_classwork_time_setting -> {
+
+            }
+
+            R.id.menu_semester_setting -> {
+
+            }
+        }
+        return true
     }
 }

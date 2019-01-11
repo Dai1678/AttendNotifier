@@ -48,12 +48,12 @@ class DailyClassListAdapter(
         RecyclerView.ViewHolder(view) {
 
         private val icons = arrayOf(
-            R.mipmap.classwork_1_image,
-            R.mipmap.classwork_2_image,
-            R.mipmap.classwork_3_image,
-            R.mipmap.classwork_4_image,
-            R.mipmap.classwork_5_image,
-            R.mipmap.classwork_6_image
+            R.mipmap.classwork_number1_image,
+            R.mipmap.classwork_number2_image,
+            R.mipmap.classwork_number3_image,
+            R.mipmap.classwork_number4_image,
+            R.mipmap.classwork_number5_image,
+            R.mipmap.classwork_number6_image
         )
 
         private var realm: Realm
@@ -61,13 +61,16 @@ class DailyClassListAdapter(
         @SuppressLint("SetTextI18n")
         fun bindListItem(model: ClassworkModel?) {
             if (model != null) {
-                itemView.classwork_number_image.setImageResource(icons[adapterPosition])
-                itemView.classwork_name_text.text = model.classworkName
-                itemView.notify_checkbox.isChecked = model.isNotify
-                itemView.attend_time_text.text = "出席数: ${model.attendedRecord}"
-                itemView.late_time_text.text = "遅刻数: ${model.lateRecord}"
-                itemView.absent_time_text.text = "欠席数: ${model.absentRecord}"
-                itemView.classwork_time_range_text.text = model.timeRange
+                itemView.apply {
+                    classwork_number_image.setImageResource(icons[adapterPosition])
+                    notify_checkbox.isChecked = model.isNotify
+                    classwork_time_range_text.text = model.timeRange
+                    attend_time_text.text = "出席数: ${model.attendedRecord}"
+                    late_time_text.text = "遅刻数: ${model.lateRecord}"
+                    absent_time_text.text = "欠席数: ${model.absentRecord}"
+                }
+
+                setLayoutParam(itemView, model.classworkName)
 
                 itemView.setOnClickListener {
                     dailyClassListAdapter.onClickRow(
@@ -77,6 +80,9 @@ class DailyClassListAdapter(
                 }
 
                 itemView.notify_checkbox.setOnClickListener {
+                    //TODO 授業なしレイアウトとの切り替え
+                    setLayoutParam(itemView, model.classworkName)
+
                     //TODO 通知on/offの切り替え
 
 
@@ -85,8 +91,28 @@ class DailyClassListAdapter(
                 }
 
             } else {
-                itemView.classwork_name_text.text = "授業はありません"
-                itemView.notify_checkbox.visibility = View.INVISIBLE
+                itemView.apply {
+                    classwork_name_text.text = "授業はありません"
+                    notify_checkbox.visibility = View.INVISIBLE
+                }
+            }
+        }
+
+        private fun setLayoutParam(itemView: View, classworkName: String){
+            if (itemView.notify_checkbox.isChecked) {
+                itemView.apply {
+                    classwork_name_text.text = classworkName
+                    attend_time_text.visibility = View.VISIBLE
+                    late_time_text.visibility = View.VISIBLE
+                    absent_time_text.visibility = View.VISIBLE
+                }
+            } else {
+                itemView.apply {
+                    classwork_name_text.text = "授業はありません"
+                    attend_time_text.visibility = View.INVISIBLE
+                    late_time_text.visibility = View.INVISIBLE
+                    absent_time_text.visibility = View.INVISIBLE
+                }
             }
         }
 

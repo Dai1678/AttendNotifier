@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_classwork_time_setting"
+        android:title="授業時間設定"
+        app:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/menu_semester_setting"
+        android:title="セメスター切り替え"
+        app:showAsAction="never">
+
+    </item>
+</menu>
