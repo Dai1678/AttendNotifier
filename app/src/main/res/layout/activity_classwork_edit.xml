@@ -7,17 +7,32 @@
         android:layout_height="match_parent"
         tools:context=".view.ClassworkEditActivity">
 
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_classwork_edit_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorDarkBrown"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/classwork_name_header_text">
+
+    </android.support.v7.widget.Toolbar>
+
     <TextView
             android:id="@+id/classwork_name_header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="授業名の変更"
+            android:textStyle="bold"
+            android:textColor="@color/colorDarkBrown"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activity_classwork_edit_toolbar"/>
 
     <EditText
             android:id="@+id/classwork_name_edit"
@@ -58,20 +73,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="出席記録"
+            android:textStyle="bold"
+            android:textColor="@color/colorDarkBrown"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/classwork_name_divider"
             app:layout_constraintStart_toStartOf="parent"/>
-
-    <!--<View-->
-            <!--android:recordId="@+recordId/classwork_record_list_divider"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@android:color/darker_gray"-->
-            <!--app:layout_constraintBottom_toTopOf="@+recordId/classwork_record_list_view"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"/>-->
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/classwork_record_list_view"

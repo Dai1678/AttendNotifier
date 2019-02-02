@@ -1,14 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorDarkBrown</item>
         <item name="colorPrimaryDark">@color/colorBrown</item>
         <item name="android:statusBarColor">@color/colorGrayBrown</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:elevation">0dp</item>
-        <item name="android:windowContentOverlay">@null</item>
     </style>
 
 </resources>

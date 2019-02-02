@@ -1,5 +1,6 @@
 package com.example.dai.attendnotifier.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -15,12 +16,14 @@ import com.example.dai.attendnotifier.model.ClassworkModel
 import com.example.dai.attendnotifier.model.RecordRealmModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.android.synthetic.main.fragment_daily_classwork.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.view.*
 import java.util.*
 
-class DailyClassworkFragment : Fragment() {
+class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
     private lateinit var realm: Realm
+    private lateinit var clickListener: DailyClassworkFragmentClickListener
     private val classworkDataArray = arrayOfNulls<ClassworkModel?>(CLASSWORK_NUMBER_SIZE)
     private lateinit var dailyClassListAdapter: DailyClassListAdapter
 
@@ -32,6 +35,8 @@ class DailyClassworkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRealm()
+
+        setHeaderText()
 
         dailyClassListAdapter = DailyClassListAdapter(
             classworkDataArray,
@@ -54,13 +59,26 @@ class DailyClassworkFragment : Fragment() {
                 addItemDecoration(dividerItemDecoration)
             }
         }
+
+        fragment_daily_classwork_header_text.setOnClickListener(this)
+        fragment_daily_classwork_sub_text.setOnClickListener(this)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try {
+            clickListener = context as DailyClassworkFragmentClickListener
+        } catch (e: java.lang.ClassCastException) {
+            throw ClassCastException(activity!!.toString() + "must implement DailyClassworkFragmentClickListener.")
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
         Log.d("onResume", "onResume")
 
-        val pageNumber = arguments!!.getInt(PAGE, 0)
+        val pageNumber = arguments!!.getInt(DATE_NUMBER, 0)
 
         for (i in 0 until classworkDataArray.size) {
             classworkDataArray[i] = getClassworkData(pageNumber, i)
@@ -123,16 +141,49 @@ class DailyClassworkFragment : Fragment() {
         realm = Realm.getInstance(realmConfiguration)
     }
 
+    private fun setHeaderText() {
+        val pageNumber = arguments!!.getInt(DATE_NUMBER, 0)
+
+        fragment_daily_classwork_header_text.apply {
+            when(pageNumber){
+                0 -> text = resources.getText(R.string.common_monday)
+                1 -> text = resources.getText(R.string.common_tuesday)
+                2 -> text = resources.getText(R.string.common_wednesday)
+                3 -> text = resources.getText(R.string.common_thursday)
+                4 -> text = resources.getText(R.string.common_friday)
+                5 -> text = resources.getText(R.string.common_saturday)
+                6 -> text = resources.getText(R.string.common_sunday)
+            }
+        }
+    }
+
+    override fun onClick(view: View) {
+        when(view.id){
+            R.id.fragment_daily_classwork_header_text -> {
+                clickListener.headerTextClick()
+            }
+
+            R.id.fragment_daily_classwork_sub_text -> {
+                clickListener.subTextClick()
+            }
+        }
+    }
+
+    interface DailyClassworkFragmentClickListener {
+        fun headerTextClick()
+        fun subTextClick()
+    }
+
     companion object {
-        private const val PAGE = "PAGE"
+        private const val DATE_NUMBER = "DATE_NUMBER"
         private const val CLASSWORK_NUMBER_SIZE = 6
         const val CLASSWORK_NAME = "CLASSWORK_NAME"
         const val CLASSWORK_ID = "CLASSWORK_ID"
 
-        fun newInstance(page: Int): DailyClassworkFragment {
+        fun newInstance(dateNumber: Int): DailyClassworkFragment {
             val dailyClassWorkFragment = DailyClassworkFragment()
             val bundle = Bundle()
-            bundle.putInt(PAGE, page)
+            bundle.putInt(DATE_NUMBER, dateNumber)
             dailyClassWorkFragment.arguments = bundle
             return dailyClassWorkFragment
         }

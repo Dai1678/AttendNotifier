@@ -33,7 +33,12 @@ class ClassworkEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
         initRealm()
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(activity_classwork_edit_toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = intent.getStringExtra(DailyClassworkFragment.CLASSWORK_NAME)
+        }
+
 
         val classworkName = intent.getStringExtra(DailyClassworkFragment.CLASSWORK_NAME)
         classwork_name_edit.apply {
