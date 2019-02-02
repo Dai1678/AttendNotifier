@@ -2,10 +2,8 @@ package com.example.dai.attendnotifier.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.example.dai.attendnotifier.R
 import com.example.dai.attendnotifier.model.ClassworkModel
 import io.realm.Realm
@@ -34,7 +32,15 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
             //TODO 今日の曜日を取得して0~6でdateNumberに渡す
             val dailyClassworkFragment = DailyClassworkFragment.newInstance(0)
             supportFragmentManager.beginTransaction()
-                .add(R.id.daily_classwork_fragment_container, dailyClassworkFragment).commit()
+                .add(R.id.daily_classwork_fragment_container, dailyClassworkFragment, "dailyClassworkFragment").commit()
+        }
+
+        main_floating_action_button.setOnClickListener {
+            //TODO editActivityにintentしてname,timeを受け取る
+
+            val dailyClassworkFragment =
+                supportFragmentManager.findFragmentById(R.id.daily_classwork_fragment_container) as DailyClassworkFragment
+            dailyClassworkFragment.insertClasswork("追加")
         }
     }
 
@@ -55,7 +61,7 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
         val defaultClassworkStartTimeArray = resources.getStringArray(R.array.default_classwork_start_time)
         val defaultClassworkEndTimeArray = resources.getStringArray(R.array.default_classwork_end_time)
 
-        for (i in 0 until 6) {
+        for (i in 0 until 6) {  //月~土
             for (j in 0 until 6) {  //1限 ~ 6限
                 realm.executeTransaction {
                     val model =
@@ -83,7 +89,7 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
                 val bottomNavigationDrawerFragment = BottomNavigationDrawerFragment()
                 bottomNavigationDrawerFragment.show(supportFragmentManager, "bottomNavigationDrawer")

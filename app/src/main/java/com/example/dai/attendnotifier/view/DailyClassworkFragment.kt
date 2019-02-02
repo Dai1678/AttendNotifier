@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +26,7 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
     private lateinit var realm: Realm
     private lateinit var clickListener: DailyClassworkFragmentClickListener
-    private val classworkDataArray = arrayOfNulls<ClassworkModel?>(CLASSWORK_NUMBER_SIZE)
+    private val classworkDataArray = arrayListOf<ClassworkModel?>()
     private lateinit var dailyClassListAdapter: DailyClassListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,6 +39,17 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         initRealm()
 
         setHeaderText()
+
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or  ItemTouchHelper.RIGHT){
+            override fun onMove(view: RecyclerView, holder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(view: RecyclerView.ViewHolder, direction: Int) {
+                val swipedPosition = view.adapterPosition
+                removeClasswork(swipedPosition)
+            }
+        })
 
         dailyClassListAdapter = DailyClassListAdapter(
             classworkDataArray,
@@ -51,12 +64,15 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
             })
 
         with(view) {
+            itemTouchHelper.attachToRecyclerView(daily_class_list_view)
             daily_class_list_view.apply {
                 adapter = dailyClassListAdapter
                 layoutManager = LinearLayoutManager(context)
 
                 val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
                 addItemDecoration(dividerItemDecoration)
+
+                addItemDecoration(itemTouchHelper)
             }
         }
 
@@ -80,8 +96,9 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
         val pageNumber = arguments!!.getInt(DATE_NUMBER, 0)
 
-        for (i in 0 until classworkDataArray.size) {
-            classworkDataArray[i] = getClassworkData(pageNumber, i)
+        classworkDataArray.clear()
+        for (i in 0 until getClassworkDataSize(pageNumber)) {
+            classworkDataArray.add(getClassworkData(pageNumber, i))
         }
 
         dailyClassListAdapter.notifyDataSetChanged()
@@ -92,10 +109,15 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         realm.close()
     }
 
+    //曜日あたりの授業取得
     private fun getClassworkData(pageNumber: Int, classworkNumber: Int): ClassworkModel? {
-        //曜日あたりの授業数取得
         return realm.where(ClassworkModel::class.java).equalTo("dayOfWeekId", pageNumber)
             .equalTo("classworkNumberId", classworkNumber).findFirst()
+    }
+
+    //曜日あたりの授業数取得
+    private fun getClassworkDataSize(pageNumber: Int): Int {
+        return realm.where(ClassworkModel::class.java).equalTo("dayOfWeekId", pageNumber).findAll().size
     }
 
     private fun isRecordDataCreated(id: Int): Boolean {
@@ -167,6 +189,30 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
                 clickListener.subTextClick()
             }
         }
+    }
+
+    fun insertClasswork(name: String) {
+        //TODO 10個以上は作れないようにする
+
+        val dateNumber = arguments!!.getInt(DATE_NUMBER, 0)
+
+        val model = ClassworkModel().apply {
+            dayOfWeekId = dateNumber
+            classworkNumberId = classworkDataArray.size
+            classworkName = name
+            timeRange = "9:00 ~ 10:50"  //FIXME
+        }
+
+        classworkDataArray.add(model)
+        //TODO DB追加処理
+
+        dailyClassListAdapter.notifyItemInserted(classworkDataArray.size)
+    }
+
+    private fun removeClasswork(position: Int) {
+        classworkDataArray.removeAt(position)
+        //dailyClassListAdapter.notifyItemRemoved(position)
+        dailyClassListAdapter.notifyDataSetChanged()
     }
 
     interface DailyClassworkFragmentClickListener {

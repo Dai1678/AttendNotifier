@@ -12,12 +12,12 @@ import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.daily_class_list_item.view.*
 
 class DailyClassListAdapter(
-    classworkList: Array<ClassworkModel?>,
+    classworkList: ArrayList<ClassworkModel?>,
     private val dailyClassListAdapterListener: DailyClassListListener
 ) :
     RecyclerView.Adapter<DailyClassListAdapter.ViewHolder>() {
 
-    private var classworkList: Array<ClassworkModel?> = classworkList
+    private var classworkList: ArrayList<ClassworkModel?> = classworkList
         set(classworkList) {
             field = classworkList
             notifyDataSetChanged()
@@ -47,12 +47,14 @@ class DailyClassListAdapter(
     class ViewHolder(view: View, val dailyClassListAdapter: DailyClassListListener) :
         RecyclerView.ViewHolder(view) {
 
+        //TODO 10個くらい用意しとく
         private val icons = arrayOf(
             R.mipmap.classwork_number1_image,
             R.mipmap.classwork_number2_image,
             R.mipmap.classwork_number3_image,
             R.mipmap.classwork_number4_image,
             R.mipmap.classwork_number5_image,
+            R.mipmap.classwork_number6_image,
             R.mipmap.classwork_number6_image
         )
 

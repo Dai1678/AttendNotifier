@@ -20,4 +20,6 @@ open class ClassworkModel : RealmObject() {  //1授業あたりのモデル
     open var otherRecord: Int = 0  //その他
 
     open var timeRange: String = ""  //授業の開始時刻 ~ 終了時刻
+    open var startTime: Date = Date()
+    open var endTime: Date = Date()
 }
