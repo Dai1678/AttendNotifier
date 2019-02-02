@@ -2,6 +2,7 @@ package com.example.dai.attendnotifier.adapter
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,11 @@ class DailyClassListAdapter(
     classworkList: ArrayList<ClassworkModel?>,
     private val dailyClassListAdapterListener: DailyClassListListener
 ) :
-    RecyclerView.Adapter<DailyClassListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val EMPTY_VIEW = 10
+    }
 
     private var classworkList: ArrayList<ClassworkModel?> = classworkList
         set(classworkList) {
@@ -23,25 +28,51 @@ class DailyClassListAdapter(
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val rowView = LayoutInflater.from(parent.context).inflate(R.layout.daily_class_list_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view: View
+        Log.d("empty", itemCount.toString())
+        if (viewType == EMPTY_VIEW) {
+            view = LayoutInflater.from(parent.context).inflate(R.layout.empty_recycler_view, parent, false)
+            parent.isFocusable = false
+            return EmptyViewHolder(view)
+        }
+
+        view = LayoutInflater.from(parent.context).inflate(R.layout.daily_class_list_item, parent, false)
         return ViewHolder(
-            view = rowView,
+            view = view,
             dailyClassListAdapter = dailyClassListAdapterListener
         )
     }
 
     override fun getItemCount(): Int {
-        return classworkList.size
+        return if (classworkList.size > 0) classworkList.size else 1
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindListItem(classworkList[position])
+    override fun getItemViewType(position: Int): Int {
+        if (classworkList.size == 0) {
+            Log.d("empty", "this is empty")
+            return EMPTY_VIEW
+        }
+        return super.getItemViewType(position)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ViewHolder) {
+            holder.bindListItem(classworkList[position])
+        } else if (holder is EmptyViewHolder) {
+            holder.bindItem()
+        }
     }
 
     interface DailyClassListListener {
         fun onClickRow(classworkName: String, id: Int)
         fun onClickCheckBox(id: Int)
+    }
+
+    class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bindItem() {
+            super.itemView
+        }
     }
 
     class ViewHolder(view: View, val dailyClassListAdapter: DailyClassListListener) :
@@ -124,6 +155,8 @@ class DailyClassListAdapter(
                 .schemaVersion(0)
                 .build()
             realm = Realm.getInstance(realmConfiguration)
+
+
         }
     }
 }

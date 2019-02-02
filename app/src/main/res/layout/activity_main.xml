@@ -10,7 +10,7 @@
             android:id="@+id/daily_classwork_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="72dp"/>
+            android:layout_marginBottom="?attr/actionBarSize"/>
 
     <android.support.design.bottomappbar.BottomAppBar
             android:id="@+id/main_bottom_app_bar"

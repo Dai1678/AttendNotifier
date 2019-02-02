@@ -40,14 +40,24 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
         setHeaderText()
 
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or  ItemTouchHelper.RIGHT){
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.ACTION_STATE_IDLE){
+
+            override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+                if (viewHolder is DailyClassListAdapter.ViewHolder) {
+                    return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+                }
+                return super.getMovementFlags(recyclerView, viewHolder)
+            }
+
             override fun onMove(view: RecyclerView, holder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return false
             }
 
             override fun onSwiped(view: RecyclerView.ViewHolder, direction: Int) {
-                val swipedPosition = view.adapterPosition
-                removeClasswork(swipedPosition)
+                if (view is DailyClassListAdapter.ViewHolder) {
+                    val swipedPosition = view.adapterPosition
+                    removeClasswork(swipedPosition)
+                }
             }
         })
 
@@ -64,8 +74,8 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
             })
 
         with(view) {
-            itemTouchHelper.attachToRecyclerView(daily_class_list_view)
-            daily_class_list_view.apply {
+            itemTouchHelper.attachToRecyclerView(daily_classwork_list_view)
+            daily_classwork_list_view.apply {
                 adapter = dailyClassListAdapter
                 layoutManager = LinearLayoutManager(context)
 
@@ -92,7 +102,6 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        Log.d("onResume", "onResume")
 
         val pageNumber = arguments!!.getInt(DATE_NUMBER, 0)
 
