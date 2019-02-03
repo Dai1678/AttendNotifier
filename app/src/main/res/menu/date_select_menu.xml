@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/menu_monday"
+            android:title="@string/common_monday"/>
+
+        <item
+            android:id="@+id/menu_tuesday"
+            android:title="@string/common_tuesday"/>
+
+        <item
+            android:id="@+id/menu_wednesday"
+            android:title="@string/common_wednesday"/>
+
+        <item
+            android:id="@+id/menu_thursday"
+            android:title="@string/common_thursday"/>
+
+        <item
+            android:id="@+id/menu_friday"
+            android:title="@string/common_friday"/>
+
+        <item
+            android:id="@+id/menu_saturday"
+            android:title="@string/common_saturday"/>
+
+        <item
+            android:id="@+id/menu_sunday"
+            android:title="@string/common_sunday"/>
+    </group>
+</menu>

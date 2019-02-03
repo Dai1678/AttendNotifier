@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TextView
@@ -33,7 +34,12 @@ class ClassworkEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
         initRealm()
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(activity_classwork_edit_toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = intent.getStringExtra(DailyClassworkFragment.CLASSWORK_NAME)
+        }
+
 
         val classworkName = intent.getStringExtra(DailyClassworkFragment.CLASSWORK_NAME)
         classwork_name_edit.apply {
@@ -71,8 +77,8 @@ class ClassworkEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         realm.close()
     }
 
+    //授業あたりの出席記録取得
     private fun getRecordData(recordId: Int, classworkTimeNumber: Int): RecordRealmModel? {
-        //授業あたりの出席記録取得
         return realm.where(RecordRealmModel::class.java).equalTo("recordId", recordId)
             .equalTo("classworkTimeId", classworkTimeNumber).findFirst()
     }
@@ -89,28 +95,24 @@ class ClassworkEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
         val classworkName = classwork_name_edit.text.toString()
 
-        //TODO 変更ない場合は更新処理しない
         realm.executeTransaction {
             val classworkModel = it.where(ClassworkModel::class.java).equalTo("id", classworkId).findFirst()
 
-            if (classworkModel != null) {
-                classworkModel.classworkName = classworkName
-                classworkModel.notAttendRecord =
-                        classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.NOT_ATTEND.num)
-                classworkModel.attendedRecord =
-                        classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.ATTENDED.num)
-                classworkModel.lateRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.LATE.num)
-                classworkModel.absentRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.ABSENT.num)
-                classworkModel.otherRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.OTHER.num)
+            classworkModel?.let { model ->
+                model.classworkName = classworkName
+                model.notAttendRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.NOT_ATTEND.num)
+                model.attendedRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.ATTENDED.num)
+                model.lateRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.LATE.num)
+                model.absentRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.ABSENT.num)
+                model.otherRecord = classworkRecordListAdapter.getAttendRecord(AttendStatusEnum.OTHER.num)
 
                 Log.d("classworkName", classworkName)
                 Log.d(
                     "attendRecord",
-                    "出席数: ${classworkModel.attendedRecord} 遅刻数: ${classworkModel.lateRecord} 欠席数: ${classworkModel.absentRecord}"
+                    "出席数: ${model.attendedRecord} 遅刻数: ${model.lateRecord} 欠席数: ${model.absentRecord}"
                 )
             }
         }
-
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
@@ -118,24 +120,26 @@ class ClassworkEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         clickRowText.text = selectDateString
 
         realm.executeTransaction {
-            val result = realm.where(RecordRealmModel::class.java).equalTo("id", clickRowId).findFirst()
-            if (result != null) {
-                result.dateStr = selectDateString
-            }
+            val result = it.where(RecordRealmModel::class.java).equalTo("id", clickRowId).findFirst()
+            result?.let { result.dateStr = selectDateString }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            //TODO 端末のバックキーでも保存処理させる
             android.R.id.home -> {
                 saveClassworkInfo()
                 finish()
                 return true
             }
         }
-
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        saveClassworkInfo()
+        finish()
     }
 
     private fun initRealm() {

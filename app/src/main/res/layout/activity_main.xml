@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/activity_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".view.MainActivity">
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
+    <FrameLayout
+            android:id="@+id/daily_classwork_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorDarkBrown"
-            app:tabTextColor="@android:color/white"
-            android:elevation="4dp"
-            android:minHeight="?attr/actionBarSize"
-            app:tabMinWidth="100dp"
-            app:tabGravity="fill"
-            app:tabMode="scrollable"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize"/>
 
-    <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
+    <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/bottom_app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tab_layout">
+            android:layout_height="match_parent">
 
-    </android.support.v4.view.ViewPager>
+        <android.support.design.bottomappbar.BottomAppBar
+                android:id="@+id/main_bottom_app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                style="@style/Widget.MaterialComponents.BottomAppBar"
+                app:fabAlignmentMode="center"
+                app:backgroundTint="@color/colorDarkBrown"
+                app:navigationIcon="@drawable/ic_menu"
+                app:hideOnScroll="true"/>
+
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/main_floating_action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorBrown"
+                android:src="@drawable/ic_add"
+                app:layout_behavior=""
+                app:layout_anchor="@id/main_bottom_app_bar"
+                app:fabSize="normal"
+                app:borderWidth="0dp"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </android.support.constraint.ConstraintLayout>

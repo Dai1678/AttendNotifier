@@ -2,12 +2,12 @@
     <string name="app_name">AttendNotifier</string>
 
     <array name="classwork_number_images">
-        <item>@mipmap/classwork_number1_image</item>
-        <item>@mipmap/classwork_number2_image</item>
-        <item>@mipmap/classwork_number3_image</item>
-        <item>@mipmap/classwork_number4_image</item>
-        <item>@mipmap/classwork_number5_image</item>
-        <item>@mipmap/classwork_number6_image</item>
+        <item>@drawable/classwork_number1_image</item>
+        <item>@drawable/classwork_number2_image</item>
+        <item>@drawable/classwork_number3_image</item>
+        <item>@drawable/classwork_number4_image</item>
+        <item>@drawable/classwork_number5_image</item>
+        <item>@drawable/classwork_number6_image</item>
     </array>
 
     <string name="common_not_attend">未受講</string>
