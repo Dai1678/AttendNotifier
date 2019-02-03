@@ -78,15 +78,17 @@ class DailyClassListAdapter(
     class ViewHolder(view: View, val dailyClassListAdapter: DailyClassListListener) :
         RecyclerView.ViewHolder(view) {
 
-        //TODO 10個くらい用意しとく
         private val icons = arrayOf(
-            R.mipmap.classwork_number1_image,
-            R.mipmap.classwork_number2_image,
-            R.mipmap.classwork_number3_image,
-            R.mipmap.classwork_number4_image,
-            R.mipmap.classwork_number5_image,
-            R.mipmap.classwork_number6_image,
-            R.mipmap.classwork_number6_image
+            R.drawable.classwork_number1_image,
+            R.drawable.classwork_number2_image,
+            R.drawable.classwork_number3_image,
+            R.drawable.classwork_number4_image,
+            R.drawable.classwork_number5_image,
+            R.drawable.classwork_number6_image,
+            R.drawable.classwork_number7_image,
+            R.drawable.classwork_number8_image,
+            R.drawable.classwork_number9_image,
+            R.drawable.classwork_number10_image
         )
 
         private var realm: Realm

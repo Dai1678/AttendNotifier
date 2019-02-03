@@ -13,20 +13,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkFragmentClickListener {
 
-    private lateinit var realm: Realm
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(main_bottom_app_bar)
-
-        initRealm()
-
-        //TODO わざわざ最初にデータを作らないようにする
-        if (!isRealmDataCreated()) {
-            createClassworkData()
-        }
 
         if (savedInstanceState == null) {
             //TODO 今日の曜日を取得して0~6でdateNumberに渡す
@@ -41,36 +32,6 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
             val dailyClassworkFragment =
                 supportFragmentManager.findFragmentById(R.id.daily_classwork_fragment_container) as DailyClassworkFragment
             dailyClassworkFragment.insertClasswork("追加")
-        }
-    }
-
-    private fun initRealm() {
-        val realmConfiguration = RealmConfiguration.Builder()
-            .deleteRealmIfMigrationNeeded()
-            .schemaVersion(0)
-            .build()
-        realm = Realm.getInstance(realmConfiguration)
-    }
-
-    private fun isRealmDataCreated(): Boolean {
-        val result = realm.where(ClassworkModel::class.java).findAll()
-        return result.size > 0
-    }
-
-    private fun createClassworkData() {
-        val defaultClassworkStartTimeArray = resources.getStringArray(R.array.default_classwork_start_time)
-        val defaultClassworkEndTimeArray = resources.getStringArray(R.array.default_classwork_end_time)
-
-        for (i in 0 until 6) {  //月~土
-            for (j in 0 until 6) {  //1限 ~ 6限
-                realm.executeTransaction {
-                    val model =
-                        it.createObject(ClassworkModel::class.java, UUID.randomUUID().mostSignificantBits.toInt())
-                    model.dayOfWeekId = i
-                    model.classworkNumberId = j
-                    model.timeRange = "${defaultClassworkStartTimeArray[j]} ~ ${defaultClassworkEndTimeArray[j]}"
-                }
-            }
         }
     }
 

@@ -2,13 +2,15 @@ package com.example.dai.attendnotifier.view
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +20,7 @@ import com.example.dai.attendnotifier.model.ClassworkModel
 import com.example.dai.attendnotifier.model.RecordRealmModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.view.*
 import java.util.*
@@ -40,26 +43,34 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
         setHeaderText()
 
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.ACTION_STATE_IDLE){
+        val itemTouchHelper =
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.ACTION_STATE_IDLE) {
 
-            override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                if (viewHolder is DailyClassListAdapter.ViewHolder) {
-                    return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+                override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+                    if (viewHolder is DailyClassListAdapter.ViewHolder) {
+                        return ItemTouchHelper.Callback.makeMovementFlags(
+                            0,
+                            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                        )
+                    }
+                    return super.getMovementFlags(recyclerView, viewHolder)
                 }
-                return super.getMovementFlags(recyclerView, viewHolder)
-            }
 
-            override fun onMove(view: RecyclerView, holder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                return false
-            }
-
-            override fun onSwiped(view: RecyclerView.ViewHolder, direction: Int) {
-                if (view is DailyClassListAdapter.ViewHolder) {
-                    val swipedPosition = view.adapterPosition
-                    removeClasswork(swipedPosition)
+                override fun onMove(
+                    view: RecyclerView,
+                    holder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
                 }
-            }
-        })
+
+                override fun onSwiped(view: RecyclerView.ViewHolder, direction: Int) {
+                    if (view is DailyClassListAdapter.ViewHolder) {
+                        val swipedPosition = view.adapterPosition
+                        removeClasswork(swipedPosition)
+                    }
+                }
+            })
 
         dailyClassListAdapter = DailyClassListAdapter(
             classworkDataArray,
@@ -97,7 +108,6 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         } catch (e: java.lang.ClassCastException) {
             throw ClassCastException(activity!!.toString() + "must implement DailyClassworkFragmentClickListener.")
         }
-
     }
 
     override fun onResume() {
@@ -118,15 +128,153 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         realm.close()
     }
 
+    private fun intentClassworkEdit(classworkName: String, id: Int) {
+        if (!isRecordDataCreated(id)) {
+            createRecordData(id)
+        }
+
+        val intent = Intent(activity, ClassworkEditActivity::class.java)
+        intent.putExtra(CLASSWORK_NAME, classworkName)
+        intent.putExtra(CLASSWORK_ID, id)
+        startActivity(intent)
+    }
+
+    private fun setHeaderText() {
+        val pageNumber = arguments!!.getInt(DATE_NUMBER, 0)
+
+        fragment_daily_classwork_header_text.apply {
+            when (pageNumber) {
+                0 -> text = resources.getText(R.string.common_monday)
+                1 -> text = resources.getText(R.string.common_tuesday)
+                2 -> text = resources.getText(R.string.common_wednesday)
+                3 -> text = resources.getText(R.string.common_thursday)
+                4 -> text = resources.getText(R.string.common_friday)
+                5 -> text = resources.getText(R.string.common_saturday)
+                6 -> text = resources.getText(R.string.common_sunday)
+            }
+        }
+    }
+
+    private fun setSubText() {
+        //TODO 表示中のセメスターをテキスト表示
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.fragment_daily_classwork_header_text -> {
+                clickListener.headerTextClick()
+            }
+
+            R.id.fragment_daily_classwork_sub_text -> {
+                clickListener.subTextClick()
+            }
+        }
+    }
+
+    fun insertClasswork(name: String) {
+        if (classworkDataArray.size < MAX_CLASSWORK_SIZE) {
+            val model = createClassworkData()
+            classworkDataArray.add(model)
+            dailyClassListAdapter.notifyItemInserted(classworkDataArray.size)
+        } else {
+            showWarning()
+        }
+    }
+
+    private fun removeClasswork(position: Int) {
+        val targetModel = classworkDataArray[position]
+        targetModel?.let {
+            deleteClassworkData(it)
+            classworkDataArray.removeAt(position)
+            updateClassworkNumber()
+            dailyClassListAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun showWarning() {
+        val marginSide = 0
+        val marginBottom = 230  //FIXME 端末依存ありそう
+        val snackBar = Snackbar.make(
+            activity!!.bottom_app_bar_layout,
+            "これ以上作成できません",
+            Snackbar.LENGTH_SHORT
+        ).setAction(null) {  }
+
+        val snackBarView = snackBar.view
+        val params = snackBarView.layoutParams as CoordinatorLayout.LayoutParams
+
+        params.setMargins(
+            params.leftMargin + marginSide,
+            params.topMargin,
+            params.rightMargin + marginSide,
+            params.bottomMargin + marginBottom
+        )
+
+        snackBarView.layoutParams = params
+        snackBar.show()
+    }
+
+    interface DailyClassworkFragmentClickListener {
+        fun headerTextClick()
+        fun subTextClick()
+    }
+
+    /*--------- Realm -------------*/
+    private fun initRealm() {
+        val realmConfiguration = RealmConfiguration.Builder()
+            .deleteRealmIfMigrationNeeded()
+            .schemaVersion(0)
+            .build()
+        realm = Realm.getInstance(realmConfiguration)
+    }
+
+    private fun createClassworkData(): ClassworkModel {
+        val dateNumber = arguments!!.getInt(DATE_NUMBER, 0)
+        var model = ClassworkModel()
+
+        realm.executeTransaction {
+            model = it.createObject(ClassworkModel::class.java, UUID.randomUUID().mostSignificantBits.toInt())
+            model.apply {
+                dayOfWeekId = dateNumber
+                classworkNumberId = classworkDataArray.size
+                //FIXME
+                //classworkName = name
+                //timeRange = ""
+            }
+        }
+        return model
+    }
+
     //曜日あたりの授業取得
-    private fun getClassworkData(pageNumber: Int, classworkNumber: Int): ClassworkModel? {
-        return realm.where(ClassworkModel::class.java).equalTo("dayOfWeekId", pageNumber)
+    private fun getClassworkData(dateNumber: Int, classworkNumber: Int): ClassworkModel? {
+        return realm.where(ClassworkModel::class.java).equalTo("dayOfWeekId", dateNumber)
             .equalTo("classworkNumberId", classworkNumber).findFirst()
     }
 
     //曜日あたりの授業数取得
-    private fun getClassworkDataSize(pageNumber: Int): Int {
-        return realm.where(ClassworkModel::class.java).equalTo("dayOfWeekId", pageNumber).findAll().size
+    private fun getClassworkDataSize(dateNumber: Int): Int {
+        return realm.where(ClassworkModel::class.java).equalTo("dayOfWeekId", dateNumber).findAll().size
+    }
+
+    //授業データの削除
+    private fun deleteClassworkData(targetModel: ClassworkModel) {
+        val targetId = targetModel.id
+
+        realm.executeTransaction {
+            val result = realm.where(ClassworkModel::class.java).equalTo("id", targetId).findFirst()
+            result?.deleteFromRealm()
+        }
+    }
+
+    //授業時限の更新
+    private fun updateClassworkNumber() {
+        realm.executeTransaction {
+            for (i in 0 until classworkDataArray.size) {
+                val result =
+                    realm.where(ClassworkModel::class.java).equalTo("id", classworkDataArray[i]!!.id).findFirst()
+                result?.classworkNumberId = i
+            }
+        }
     }
 
     private fun isRecordDataCreated(id: Int): Boolean {
@@ -144,94 +292,17 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun intentClassworkEdit(classworkName: String, id: Int) {
-        if (!isRecordDataCreated(id)) {
-            createRecordData(id)
-        }
-
-        val intent = Intent(activity, ClassworkEditActivity::class.java)
-        intent.putExtra(CLASSWORK_NAME, classworkName)
-        intent.putExtra(CLASSWORK_ID, id)
-        startActivity(intent)
-    }
-
     private fun setNotifyStatusChanged(id: Int) {
         realm.executeTransaction {
             val model = it.where(ClassworkModel::class.java).equalTo("id", id).findFirst()
-            if (model != null) {
-                model.isNotify = !model.isNotify
-            }
+            model?.let { model.isNotify = !(model.isNotify) }
         }
     }
-
-    private fun initRealm() {
-        val realmConfiguration = RealmConfiguration.Builder()
-            .deleteRealmIfMigrationNeeded()
-            .schemaVersion(0)
-            .build()
-        realm = Realm.getInstance(realmConfiguration)
-    }
-
-    private fun setHeaderText() {
-        val pageNumber = arguments!!.getInt(DATE_NUMBER, 0)
-
-        fragment_daily_classwork_header_text.apply {
-            when(pageNumber){
-                0 -> text = resources.getText(R.string.common_monday)
-                1 -> text = resources.getText(R.string.common_tuesday)
-                2 -> text = resources.getText(R.string.common_wednesday)
-                3 -> text = resources.getText(R.string.common_thursday)
-                4 -> text = resources.getText(R.string.common_friday)
-                5 -> text = resources.getText(R.string.common_saturday)
-                6 -> text = resources.getText(R.string.common_sunday)
-            }
-        }
-    }
-
-    override fun onClick(view: View) {
-        when(view.id){
-            R.id.fragment_daily_classwork_header_text -> {
-                clickListener.headerTextClick()
-            }
-
-            R.id.fragment_daily_classwork_sub_text -> {
-                clickListener.subTextClick()
-            }
-        }
-    }
-
-    fun insertClasswork(name: String) {
-        //TODO 10個以上は作れないようにする
-
-        val dateNumber = arguments!!.getInt(DATE_NUMBER, 0)
-
-        val model = ClassworkModel().apply {
-            dayOfWeekId = dateNumber
-            classworkNumberId = classworkDataArray.size
-            classworkName = name
-            timeRange = "9:00 ~ 10:50"  //FIXME
-        }
-
-        classworkDataArray.add(model)
-        //TODO DB追加処理
-
-        dailyClassListAdapter.notifyItemInserted(classworkDataArray.size)
-    }
-
-    private fun removeClasswork(position: Int) {
-        classworkDataArray.removeAt(position)
-        //dailyClassListAdapter.notifyItemRemoved(position)
-        dailyClassListAdapter.notifyDataSetChanged()
-    }
-
-    interface DailyClassworkFragmentClickListener {
-        fun headerTextClick()
-        fun subTextClick()
-    }
+    /*--------- Realm -------------*/
 
     companion object {
         private const val DATE_NUMBER = "DATE_NUMBER"
-        private const val CLASSWORK_NUMBER_SIZE = 6
+        private const val MAX_CLASSWORK_SIZE = 10
         const val CLASSWORK_NAME = "CLASSWORK_NAME"
         const val CLASSWORK_ID = "CLASSWORK_ID"
 
@@ -243,5 +314,4 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
             return dailyClassWorkFragment
         }
     }
-
 }
