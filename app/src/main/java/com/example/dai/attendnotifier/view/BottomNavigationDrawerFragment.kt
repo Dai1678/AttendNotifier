@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.dai.attendnotifier.R
 import kotlinx.android.synthetic.main.fragment_bottom_navigation_drawer.*
+import java.util.*
 
 class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
 
@@ -26,15 +27,15 @@ class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
         }
 
         bottom_navigation_view.setNavigationItemSelectedListener {
-            var dateNumber = 0
+            var dateNumber = Calendar.MONDAY
             when (it.itemId) {
-                R.id.menu_monday -> dateNumber = 0
-                R.id.menu_tuesday -> dateNumber = 1
-                R.id.menu_wednesday -> dateNumber = 2
-                R.id.menu_thursday -> dateNumber = 3
-                R.id.menu_friday -> dateNumber = 4
-                R.id.menu_saturday -> dateNumber = 5
-                //R.id.menu_sunday -> dateNumber = 6
+                R.id.menu_sunday -> dateNumber = Calendar.SUNDAY
+                R.id.menu_monday -> dateNumber = Calendar.MONDAY
+                R.id.menu_tuesday -> dateNumber = Calendar.TUESDAY
+                R.id.menu_wednesday -> dateNumber = Calendar.WEDNESDAY
+                R.id.menu_thursday -> dateNumber = Calendar.THURSDAY
+                R.id.menu_friday -> dateNumber = Calendar.FRIDAY
+                R.id.menu_saturday -> dateNumber = Calendar.SATURDAY
             }
 
             val dailyClassworkFragment = DailyClassworkFragment.newInstance(dateNumber)

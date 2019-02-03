@@ -20,8 +20,10 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
         setSupportActionBar(main_bottom_app_bar)
 
         if (savedInstanceState == null) {
-            //TODO 今日の曜日を取得して0~6でdateNumberに渡す
-            val dailyClassworkFragment = DailyClassworkFragment.newInstance(0)
+            val today = Calendar.getInstance()
+            val dateNumber = today.get(Calendar.DAY_OF_WEEK)
+
+            val dailyClassworkFragment = DailyClassworkFragment.newInstance(dateNumber)
             supportFragmentManager.beginTransaction()
                 .add(R.id.daily_classwork_fragment_container, dailyClassworkFragment, "dailyClassworkFragment").commit()
         }

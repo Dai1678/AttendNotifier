@@ -7,5 +7,8 @@ enum class ClassworkNumberEnum(val num: Int) {
     CLASSWORK_4(4),
     CLASSWORK_5(5),
     CLASSWORK_6(6),
-    CLASSWORK_7(7)
+    CLASSWORK_7(7),
+    CLASSWORK_8(8),
+    CLASSWORK_9(9),
+    CLASSWORK_10(10)
 }

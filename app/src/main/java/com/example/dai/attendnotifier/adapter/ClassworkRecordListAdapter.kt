@@ -10,8 +10,6 @@ import android.widget.TextView
 import com.example.dai.attendnotifier.R
 import com.example.dai.attendnotifier.model.AttendStatusEnum
 import com.example.dai.attendnotifier.model.RecordRealmModel
-import com.example.dai.attendnotifier.view.ClassworkEditActivity
-import com.example.dai.attendnotifier.view.DatePickDialog
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.classwork_record_list_item.view.*
@@ -89,9 +87,7 @@ class ClassworkRecordListAdapter(
 
                         realm.executeTransaction {
                             val result = realm.where(RecordRealmModel::class.java).equalTo("id", model.id).findFirst()
-                            if (result != null) {
-                                result.attendStatus = position
-                            }
+                            result?.let { result.attendStatus = position }
                         }
                     }
                 }

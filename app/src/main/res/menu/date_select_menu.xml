@@ -25,9 +25,8 @@
             android:id="@+id/menu_saturday"
             android:title="@string/common_saturday"/>
 
-        <!--<item-->
-            <!--android:id="@+id/menu_sunday"-->
-            <!--android:icon="@drawable/ic_sunday"-->
-            <!--android:title="@string/common_sunday"/>-->
+        <item
+            android:id="@+id/menu_sunday"
+            android:title="@string/common_sunday"/>
     </group>
 </menu>

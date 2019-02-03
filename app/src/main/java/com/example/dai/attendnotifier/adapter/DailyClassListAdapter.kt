@@ -2,7 +2,6 @@ package com.example.dai.attendnotifier.adapter
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class DailyClassListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
-        Log.d("empty", itemCount.toString())
         if (viewType == EMPTY_VIEW) {
             view = LayoutInflater.from(parent.context).inflate(R.layout.empty_recycler_view, parent, false)
             parent.isFocusable = false
@@ -50,7 +48,6 @@ class DailyClassListAdapter(
 
     override fun getItemViewType(position: Int): Int {
         if (classworkList.size == 0) {
-            Log.d("empty", "this is empty")
             return EMPTY_VIEW
         }
         return super.getItemViewType(position)
@@ -133,7 +130,7 @@ class DailyClassListAdapter(
             }
         }
 
-        private fun setLayoutParam(itemView: View, classworkName: String){
+        private fun setLayoutParam(itemView: View, classworkName: String) {
             if (itemView.notify_checkbox.isChecked) {
                 itemView.apply {
                     classwork_name_text.text = classworkName
