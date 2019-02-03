@@ -10,7 +10,8 @@ open class ClassworkModel : RealmObject() {  //1授業あたりのモデル
     @PrimaryKey
     open var id: Int = UUID.randomUUID().mostSignificantBits.toInt() //0  //固有Id
     open var dayOfWeekNumber: Int = Calendar.MONDAY  //曜日あたりのId Calendar.SUNDAY ~ Calendar.SATURDAY
-    open var classworkNumber: Int = ClassworkNumberEnum.CLASSWORK_1.num  //時限番号 ClassworkNumberEnum.CLASSWORK_1.num ~ ClassworkNumberEnum.CLASSWORK_10.num
+    open var classworkNumber: Int =
+        ClassworkNumberEnum.CLASSWORK_1.num  //時限番号 ClassworkNumberEnum.CLASSWORK_1.num ~ ClassworkNumberEnum.CLASSWORK_10.num
     open var classworkName: String = "授業"  //授業名
     open var isNotify: Boolean = true  //通知on/off
     open var notAttendRecord: Int = 0  //未受講数
