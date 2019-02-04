@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
         }
 
         main_floating_action_button.setOnClickListener {
-            //TODO editActivityにintentしてname,timeを受け取る
+            //TODO editActivityにintentしてnameとtimeRange取得
 
             val dailyClassworkFragment =
                 supportFragmentManager.findFragmentById(R.id.daily_classwork_fragment_container) as DailyClassworkFragment

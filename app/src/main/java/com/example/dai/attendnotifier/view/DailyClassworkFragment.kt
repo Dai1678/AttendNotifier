@@ -1,5 +1,6 @@
 package com.example.dai.attendnotifier.view
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.example.dai.attendnotifier.model.RecordRealmModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.daily_class_list_item.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.view.*
 import java.util.*
@@ -136,6 +138,7 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         intent.putExtra(CLASSWORK_NAME, classworkName)
         intent.putExtra(CLASSWORK_ID, id)
         startActivity(intent)
+        //startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, daily_classwork_list_item, "list_item").toBundle())
     }
 
     private fun setHeaderText() {
