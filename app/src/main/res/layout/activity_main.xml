@@ -20,7 +20,7 @@
         app:navigationIcon="@drawable/ic_menu"
         app:fabAlignmentMode="center"
         app:backgroundTint="@color/colorDarkBrown"
-        app:hideOnScroll="true"
+        app:hideOnScroll="false"
         app:layout_scrollFlags="scroll|enterAlways"
         app:layout_anchorGravity="bottom|center"
         app:layout_anchor="@+id/daily_classwork_fragment_container"/>
