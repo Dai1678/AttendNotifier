@@ -14,9 +14,11 @@
     <android.support.design.bottomappbar.BottomAppBar
         android:id="@+id/main_bottom_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:theme="@style/AppTheme.BottomAppBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:maxButtonHeight="56dp"
         app:navigationIcon="@drawable/ic_menu"
         app:fabAlignmentMode="center"
         app:backgroundTint="@color/colorDarkBrown"
