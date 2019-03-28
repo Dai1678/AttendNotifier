@@ -3,11 +3,11 @@ package com.example.dai.attendnotifier.view
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.widget.DatePicker
+import androidx.fragment.app.DialogFragment
 import java.util.*
 
-class DatePickDialog: DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
@@ -16,7 +16,7 @@ class DatePickDialog: DialogFragment(), DatePickerDialog.OnDateSetListener {
         val day = calendar.get(Calendar.DAY_OF_YEAR)
 
         return DatePickerDialog(
-            activity,
+            context!!,
             activity as ClassworkEditActivity?,
             year,
             month,

@@ -1,12 +1,12 @@
 package com.example.dai.attendnotifier.adapter
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dai.attendnotifier.R
 import com.example.dai.attendnotifier.model.AttendStatusEnum
 import com.example.dai.attendnotifier.model.RecordRealmModel

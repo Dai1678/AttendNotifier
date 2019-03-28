@@ -3,26 +3,24 @@ package com.example.dai.attendnotifier.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.dai.attendnotifier.R
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dai.attendnotifier.adapter.DailyClassListAdapter
 import com.example.dai.attendnotifier.model.ClassworkModel
 import com.example.dai.attendnotifier.model.RecordRealmModel
+import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.view.*
 import java.util.*
+
 
 class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
@@ -32,7 +30,7 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
     private lateinit var dailyClassListAdapter: DailyClassListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_daily_classwork, container, false)
+        return inflater.inflate(com.example.dai.attendnotifier.R.layout.fragment_daily_classwork, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,7 +93,7 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         fragment_daily_classwork_sub_text.setOnClickListener(this)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             clickListener = context as DailyClassworkFragmentClickListener
@@ -139,13 +137,13 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
         fragment_daily_classwork_header_text.apply {
             when (dateNumber) {
-                Calendar.SUNDAY -> text = resources.getText(R.string.common_sunday)
-                Calendar.MONDAY -> text = resources.getText(R.string.common_monday)
-                Calendar.TUESDAY -> text = resources.getText(R.string.common_tuesday)
-                Calendar.WEDNESDAY -> text = resources.getText(R.string.common_wednesday)
-                Calendar.THURSDAY -> text = resources.getText(R.string.common_thursday)
-                Calendar.FRIDAY -> text = resources.getText(R.string.common_friday)
-                Calendar.SATURDAY -> text = resources.getText(R.string.common_saturday)
+                Calendar.SUNDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_sunday)
+                Calendar.MONDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_monday)
+                Calendar.TUESDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_tuesday)
+                Calendar.WEDNESDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_wednesday)
+                Calendar.THURSDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_thursday)
+                Calendar.FRIDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_friday)
+                Calendar.SATURDAY -> text = resources.getText(com.example.dai.attendnotifier.R.string.common_saturday)
             }
         }
     }
@@ -159,24 +157,24 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.fragment_daily_classwork_header_text -> {
+            com.example.dai.attendnotifier.R.id.fragment_daily_classwork_header_text -> {
                 clickListener.headerTextClick()
             }
 
-            R.id.fragment_daily_classwork_sub_text -> {
+            com.example.dai.attendnotifier.R.id.fragment_daily_classwork_sub_text -> {
                 clickListener.subTextClick()
             }
         }
     }
 
-    fun insertClasswork(name: String) {
+    fun insertClasswork() {
         if (classworkDataArray.size < MAX_CLASSWORK_SIZE) {
             val model = createClassworkData()
             classworkDataArray.add(model)
             dailyClassListAdapter.notifyItemInserted(classworkDataArray.size)
             daily_classwork_list_view.smoothScrollToPosition(classworkDataArray.size)
         } else {
-            showWarning()
+            showWarningAddClasswork()
         }
     }
 
@@ -190,27 +188,10 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun showWarning() {
-        val marginSide = 24
-        val marginBottom = 230  //FIXME 端末依存ありそう
-        val snackBar = Snackbar.make(
-            activity!!.bottom_app_bar_layout,
-            "これ以上作成できません",
-            Snackbar.LENGTH_LONG
-        ).setAction("OK") { }
-
-        val snackBarView = snackBar.view
-        val params = snackBarView.layoutParams as CoordinatorLayout.LayoutParams
-
-        params.setMargins(
-            params.leftMargin + marginSide,
-            params.topMargin,
-            params.rightMargin + marginSide,
-            params.bottomMargin + marginBottom
-        )
-
-        snackBarView.layoutParams = params
-        snackBar.show()
+    private fun showWarningAddClasswork() {
+        Snackbar.make(activity!!.activity_main_coordinator, "これ以上作成できません", Snackbar.LENGTH_LONG)
+            .setAction("OK") {}
+            .show()
     }
 
     interface DailyClassworkFragmentClickListener {

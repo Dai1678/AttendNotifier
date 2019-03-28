@@ -1,9 +1,9 @@
 package com.example.dai.attendnotifier.view
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.example.dai.attendnotifier.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), DailyClassworkFragment.DailyClassworkF
 
             val dailyClassworkFragment =
                 supportFragmentManager.findFragmentById(R.id.daily_classwork_fragment_container) as DailyClassworkFragment
-            dailyClassworkFragment.insertClasswork("追加")
+            dailyClassworkFragment.insertClasswork()
         }
     }
 

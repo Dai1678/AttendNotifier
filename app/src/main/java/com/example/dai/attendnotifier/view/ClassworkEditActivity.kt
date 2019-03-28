@@ -3,14 +3,13 @@ package com.example.dai.attendnotifier.view
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.KeyEvent
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dai.attendnotifier.R
 import com.example.dai.attendnotifier.adapter.ClassworkRecordListAdapter
 import com.example.dai.attendnotifier.model.AttendStatusEnum
@@ -67,7 +66,10 @@ class ClassworkEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
             layoutManager = LinearLayoutManager(context)
 
-            val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            val dividerItemDecoration = DividerItemDecoration(
+                context,
+                DividerItemDecoration.VERTICAL
+            )
             addItemDecoration(dividerItemDecoration)
         }
     }
