@@ -14,15 +14,18 @@
     <android.support.design.bottomappbar.BottomAppBar
         android:id="@+id/main_bottom_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:maxButtonHeight="56dp"
+        app:navigationIcon="@drawable/ic_menu"
         app:fabAlignmentMode="center"
         app:backgroundTint="@color/colorDarkBrown"
-        app:navigationIcon="@drawable/ic_menu"
-        app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways"/>
+        app:hideOnScroll="false"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:layout_anchorGravity="bottom|center"
+        app:layout_anchor="@+id/daily_classwork_fragment_container"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/main_floating_action_button"

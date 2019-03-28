@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -20,6 +19,7 @@ import com.example.dai.attendnotifier.model.RecordRealmModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.*
 import kotlinx.android.synthetic.main.fragment_daily_classwork.view.*
 import java.util.*
@@ -88,11 +88,6 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
             daily_classwork_list_view.apply {
                 adapter = dailyClassListAdapter
                 layoutManager = LinearLayoutManager(context)
-
-                val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-                addItemDecoration(dividerItemDecoration)
-
-                addItemDecoration(itemTouchHelper)
             }
         }
 
@@ -136,6 +131,7 @@ class DailyClassworkFragment : Fragment(), View.OnClickListener {
         intent.putExtra(CLASSWORK_NAME, classworkName)
         intent.putExtra(CLASSWORK_ID, id)
         startActivity(intent)
+        //startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, daily_classwork_list_item, "list_item").toBundle())
     }
 
     private fun setHeaderText() {
